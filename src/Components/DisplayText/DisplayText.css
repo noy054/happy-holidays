@@ -1,0 +1,21 @@
+.text-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  background-color: aliceblue;
+  border: ridge;
+  border-radius: 9%;
+}
+
+.text {
+  justify-content: flex-end;
+  margin-left: 0.5%;
+  width: 100%;
+  margin-right: 10px;
+}
+
+.total {
+  justify-content: flex-start;
+  width: 100%;
+  margin-left: 10px;
+}

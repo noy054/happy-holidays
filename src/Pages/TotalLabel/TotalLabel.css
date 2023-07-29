@@ -1,0 +1,33 @@
+.total-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f2f2f2;
+}
+
+.total-box {
+  white-space: nowrap;
+}
+
+.total-box:last-child {
+  margin-right: 10%;
+}
+
+.total-box:first-child {
+  margin-left: 10%;
+}
+
+.total-input {
+  border: none;
+  background-color: #f2f2f2;
+  text-align: center;
+  font-size: 1.5vw;
+  color: black;
+}
+
+.total-text {
+  text-align: center !important;
+}

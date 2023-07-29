@@ -1,0 +1,91 @@
+/* Table.css */
+.table-container {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Adjust the maximum width as needed */
+  margin: 0 auto;
+  width: fit-content; /* Adjust the width as needed */
+  max-width: 100%;
+}
+.table-wrapper {
+  width: 100%;
+  max-height: 400px;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  color: #333;
+  font-size: 14px;
+}
+
+.table-title {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.table-lable,
+.table-row {
+  padding: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.table-button {
+  padding: 6px 12px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.table-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.table-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #4caf50;
+}
+
+.table-input::placeholder {
+  color: #999;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 600px) {
+  .table-lable,
+  .table-row,
+  .table-button,
+  .table-input {
+    font-size: 14px;
+  }
+}
+
+.table-filter-row {
+  background-color: #f2f2f2;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.table-filter-input {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}

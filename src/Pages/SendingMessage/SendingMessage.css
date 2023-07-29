@@ -1,0 +1,53 @@
+.form-container {
+  display: flex;
+  justify-content: left;
+  align-items: flex-start;
+  flex-direction: row;
+  width: 50%;
+  height: 80%;
+  background-color: #f2f2f2;
+  margin: 0 auto;
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+.main-message {
+  width: 50%;
+}
+.title-for-finel-message {
+  text-align: center;
+  margin-bottom: 15%;
+  margin-left: 25%;
+}
+
+.finel-message {
+  height: 30vh;
+  width: 30vw;
+  text-align: right;
+  margin-left: 2%;
+}
+
+.main-form {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+.display-input {
+  display: flex;
+  flex-direction: column;
+  justify-content: right;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.input-wrapper {
+  height: 15%;
+  margin-left: 70%;
+}
+
+.send-details-button {
+  width: 20%;
+  height: 15%;
+  margin-left: 50%;
+  margin-top: 10%;
+}
