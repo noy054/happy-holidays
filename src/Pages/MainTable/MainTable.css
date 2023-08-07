@@ -1,11 +1,24 @@
 .table-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+}
+
+.tables-wrapper {
+  display: flex;
   justify-content: space-between;
 }
 
 .table-wrapper {
-  margin-right: 10px;
+  display: flex;
+}
+
+.separator {
+  width: 2px; /* Width of the separator line */
+  height: 100%;
+  background-color: #ccc; /* Color of the separator line */
+  margin: 0 10px; /* Adjust the margin as needed to control the space between tables */
 }

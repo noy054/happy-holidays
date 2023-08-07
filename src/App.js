@@ -1,11 +1,13 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import TotalLabel from "./Pages/TotalLabel/TotalLabel";
 import MainTable from "./Pages/MainTable/MainTable";
 import Sidebar from "./Components/Sidebar/Sidebar";
 import SendingMessage from "./Pages/SendingMessage/SendingMessage";
-import { AppContext, useAppContext } from "./Hook/AppContext";
+import { useAppContext } from "./Hook/AppContext";
+import Login from "./Pages/Login/Login";
 import axios from "axios";
+
 import "./App.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -29,30 +31,30 @@ const App = () => {
     totalBasketsNumberLeft,
     setTotalBasketsNumberLeft,
     totalBasketsNumber,
-    setTotalBasketsNumber,
     totalPepole,
     setTotalPepole,
-    tableData,
-    setTableData,
+    setArrivalsTableData,
+    changeBasketNumber,
+    setArrivelsLength,
   } = useAppContext();
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const handleIsArrived = async (id) => {
-    setTotalBasketsNumberLeft((basket) => basket - 1);
+    setTotalBasketsNumberLeft((basket) => basket - changeBasketNumber);
     setTotalPepole((men) => men + 1);
     await axios
-      .delete(`http://127.0.0.1:3000/arrivals/${id}`)
+      .delete(`${process.env.REACT_APP_BEACKEND_URL}/arrivals/${id}`)
       .then((response) => {
-        setTableData(response.data.data.customer);
+        setArrivalsTableData(response.data.data.customer);
+
+        if (response.data.data.length === undefined) {
+          setArrivelsLength(0);
+        } else {
+          setArrivelsLength(response.data.data.length);
+        }
       });
   };
-
-  const handleTotalBasketsNumber = useCallback(
-    (event) => {
-      setTotalBasketsNumber(event.target.value);
-      setTotalBasketsNumberLeft(event.target.value);
-    },
-    [totalBasketsNumber]
-  );
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
@@ -62,32 +64,33 @@ const App = () => {
 
   return (
     <div className="app-container">
-      <Sidebar items={sidebarItems} />
-      <div className="total-lables">
-        <TotalLabel
-          totalBasketsNumberLeft={totalBasketsNumberLeft}
-          totalBasketsNumber={totalBasketsNumber}
-          totalPepole={totalPepole}
-          handleTotalBasketsNumber={handleTotalBasketsNumber}
-          onKeyPress={handleKeyPress}
-        />
-      </div>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <MainTable
-              handleIsArrived={handleIsArrived}
-              tableData={tableData}
-              setTableData={setTableData}
+      {isLoggedIn ? (
+        <>
+          <Sidebar items={sidebarItems} />
+          <div className="total-lables">
+            <TotalLabel
+              totalBasketsNumberLeft={totalBasketsNumberLeft}
+              totalBasketsNumber={totalBasketsNumber}
+              totalPepole={totalPepole}
+              onKeyPress={handleKeyPress}
             />
-          }
-        />
-        <Route
-          path="/send"
-          element={<SendingMessage totalBasketsNumber={totalBasketsNumber} />}
-        />
-      </Routes>
+          </div>
+          <Routes>
+            <Route
+              path="/"
+              element={<MainTable handleIsArrived={handleIsArrived} />}
+            />
+            <Route
+              path="/send"
+              element={
+                <SendingMessage totalBasketsNumber={totalBasketsNumber} />
+              }
+            />
+          </Routes>
+        </>
+      ) : (
+        <Login setIsLoggedIn={setIsLoggedIn} />
+      )}
     </div>
   );
 };

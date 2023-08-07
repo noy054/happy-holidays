@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
 
 import "./Sidebar.css";
 
@@ -16,12 +17,12 @@ const Sidebar = ({ items }) => {
         <ul className="sidebar__list">
           {items.map((item, index) => (
             <li className="sidebar__item" key={index}>
-              <a href={item.link} className="sidebar__link">
+              <Link to={item.link} className="sidebar__link">
                 {item.icon && (
                   <span className="sidebar__icon">{item.icon}</span>
                 )}
                 <span className="sidebar__text">{item.text}</span>
-              </a>
+              </Link>
             </li>
           ))}
         </ul>

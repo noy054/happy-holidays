@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
-import Button from "../Button/Button";
-import InputComponent from "../Input/Input";
 import "./Table.css";
 
-const Table = ({ data, columns, defineRowTable }) => {
+const Table = ({ data, columns, defineRowTable, header }) => {
   const [filters, setFilters] = useState({
     phone: "",
     id: "",
     name: "",
   });
+
   const [filteredData, setFilteredData] = useState(data);
 
   useEffect(() => {
@@ -24,6 +23,9 @@ const Table = ({ data, columns, defineRowTable }) => {
   };
 
   const applyFilters = () => {
+    if (data === undefined || data === null) {
+      return;
+    }
     const filteredData = data.filter((row) =>
       Object.entries(filters).every(([columnKey, filterValue]) => {
         const cellValue = String(row[columnKey]).toLowerCase();
@@ -42,6 +44,9 @@ const Table = ({ data, columns, defineRowTable }) => {
   };
 
   const createTable = () => {
+    if (data === undefined || data === null) {
+      return;
+    }
     return filteredData.map((row, index) => (
       <tr className="table-column" key={index}>
         {columns.map((column) => defineRowTable(column, row))}
@@ -74,6 +79,7 @@ const Table = ({ data, columns, defineRowTable }) => {
   return (
     <div className="table-container">
       <div className="table-wrapper">
+        <h2 className="header">{header}</h2>
         <table>
           <thead className="table-title">
             <tr>{createLabel()}</tr>

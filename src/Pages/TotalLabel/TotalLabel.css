@@ -1,3 +1,9 @@
+.main-total-lable {
+  display: flex;
+  flex-direction: row;
+  background-color: #f2f2f2;
+}
+
 .total-container {
   width: 100%;
   height: 100%;
@@ -17,11 +23,12 @@
 }
 
 .total-box:first-child {
-  margin-left: 10%;
+  margin-left: 15%;
 }
 
 .total-input {
   border: none;
+  width: 6vw;
   background-color: #f2f2f2;
   text-align: center;
   font-size: 1.5vw;
@@ -30,4 +37,10 @@
 
 .total-text {
   text-align: center !important;
+}
+
+.new-division-button {
+  white-space: nowrap;
+  border: none;
+  margin-left: 5%;
 }

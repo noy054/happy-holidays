@@ -1,5 +1,6 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useContext } from "react";
 import InputComponent from "../../Components/Input/Input";
+import { AppContext } from "../../Hook/AppContext";
 import axios from "axios";
 import "./SendingMessage.css";
 
@@ -13,7 +14,6 @@ const SendMessage = (props) => {
   };
 
   const [inputValue, setInputValue] = useState({ ...initialInputState });
-
   const inputFields = [
     { key: "holidaytext", text: "הכנס את שם החג" },
     { key: "date", text: "הכנס את התאריך" },
@@ -30,16 +30,24 @@ const SendMessage = (props) => {
     }));
   };
 
-  const message = `שלום{{name}} הנך מזומן/ת לאיסוף סל מזון ל ${inputValue.holidaytext} בתאריך ${inputValue.date} משעה ${inputValue.startAt} עד השעה ${inputValue.finishAt}
-  בכתובת ${inputValue.address}  לצורך האיסוף חובה לאשר הגעה, אחרת לא נוכל להבטיח את מקומך
- שימו לב: אישור הגעה חובה ותקף רק לסל אחד בלבד. החלוקה איננה בסופר אלא בכתובת המצוינת בהודעה זו`;
+  const message = ` שלום {שם הלקוח}
+  עמותת "משמחים ילדים רעבים" מזמינה אותך לאיסוף סל מזון ל${inputValue.holidaytext} בתאריך ${inputValue.date} משעה ${inputValue.startAt} עד השעה ${inputValue.finishAt} בסופר החינמי, בכתובת: ${inputValue.address}
+  
+  לצורך האיסוף חובה לאשר הגעה, אחרת לא נוכל להבטיח מקומך.
+  
+  :שימו לב
+  .אישור ההגעה חובה ותקף לסל אחד בלבד-
+  .ההודעה אישית ולא ניתנת להעברה-
+  .הסל כבד, נא להגיע עם מישהו שיכול לעזור להרים את הסל לרכב-
+  .חשוב להגיע בזמן, אחרת הסל יועבר למשפחה אחרת-
+  .אין משלוחים-`;
 
   const handleSumbit = async () => {
     setInputValue({ ...initialInputState });
 
     await axios
       .post(
-        "http://127.0.0.1:3000/sendMessage",
+        `${process.env.REACT_APP_BEACKEND_URL}/sendMessage`,
         {
           holiday: inputValue.holidaytext,
           date: inputValue.date,

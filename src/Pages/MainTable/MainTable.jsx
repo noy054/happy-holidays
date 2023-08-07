@@ -1,42 +1,57 @@
 import React, { useState, useEffect } from "react";
 import Table from "../../Components/Table/Table";
-import Button from "../../Components/Button/Button";
-import InputComponent from "../../Components/Input/Input";
 import Combobox from "react-widgets/Combobox";
-
 import axios from "axios";
 import "react-widgets/styles.css";
 import "./MainTable.css";
+import openSocket from "socket.io-client";
+import { useAppContext } from "../../Hook/AppContext";
 
 const MainTable = (props) => {
-  const [selectedTable, setSelectedTable] = useState("main");
+  const {
+    arrivalsTableData,
+    notComingTableData,
+    setArrivalsTableData,
+    setNotComingTableData,
+    setChangeBasketNumber,
+    changeBasketNumber,
+    notComingLength,
+    setNotComingLength,
+    arrivelsLength,
+    setArrivelsLength,
+  } = useAppContext();
 
-  const [columns, setColumns] = useState([]);
+  const columnForArrivelsList = [
+    { key: "id", label: "תז" },
+    { key: "name", label: "שם" },
+    { key: "phoneNumber", label: "מספר טלפון" },
+    { key: "basketsNumber", label: "מספר סלים" },
+    { key: "isArrived", label: "האם הגיעו?" },
+  ];
 
-  const comboboxData = ["main", "arrivals", "waiting"];
+  const columnForNotCommingList = [
+    { key: "id", label: "תז" },
+    { key: "name", label: "שם" },
+    { key: "phoneNumber", label: "מספר טלפון" },
+  ];
 
-  const handleChangeTable = (value) => {
-    setSelectedTable(value);
-  };
+  useEffect(() => {
+    const socket = openSocket(`${process.env.REACT_APP_BEACKEND_URL}`);
 
-  const fetchData = async () => {
-    const response = await axios
-      .get(`http://127.0.0.1:3000/${selectedTable}`)
-      .then((response) => {
-        props.setTableData(response.data.data.customer);
+    socket.on("postNewArrivel", (data) => {
+      console.log(data.data[2]);
+      setArrivalsTableData(data.data);
+      setArrivelsLength(data.data.length);
+    });
 
-        const extractedColumns = Object.keys(
-          response.data.data.customer[0]
-        ).map((key) => ({
-          key,
-          label: key.charAt(0).toUpperCase() + key.slice(1),
-        }));
+    socket.on("postNotCommingCustomer", (data) => {
+      setNotComingTableData(data.data);
+      setNotComingLength(data.data.length);
+    });
+  }, []);
 
-        setColumns(extractedColumns);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+  const handleChangeBasketNumber = (event) => {
+    setChangeBasketNumber(event.target.value);
   };
 
   const defineRowTable = (column, row) => {
@@ -56,7 +71,11 @@ const MainTable = (props) => {
     } else if (column.key === "basketsNumber") {
       return (
         <td key={column.key} className="table-row">
-          <InputComponent placeholder={row[column.key]} />
+          <input
+            className="table-input"
+            value={changeBasketNumber}
+            onChange={handleChangeBasketNumber}
+          />
         </td>
       );
     } else {
@@ -68,27 +87,26 @@ const MainTable = (props) => {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, [selectedTable]);
-
   return (
     <div className="table-container">
-      <div className="combo-box-container">
-        <Combobox
-          dropUp
-          data={comboboxData}
-          textField="Table Type"
-          onChange={(value) => handleChangeTable(value)}
-          defaultValue="main"
-        />
-      </div>
-      <div className="table-wrapper">
-        <Table
-          data={props.tableData}
-          columns={columns}
-          defineRowTable={defineRowTable}
-        />
+      <div className="tables-wrapper">
+        <div className="table-wrapper">
+          <Table
+            data={notComingTableData}
+            columns={columnForNotCommingList}
+            defineRowTable={defineRowTable}
+            header={`(${notComingLength}) לקוחות שלא אישרו הגעה`}
+          />
+        </div>
+        <div className="separator"></div>
+        <div className="table-wrapper">
+          <Table
+            data={arrivalsTableData}
+            columns={columnForArrivelsList}
+            defineRowTable={defineRowTable}
+            header={`(${arrivelsLength}) לקוחות שאישרו הגעה`}
+          />
+        </div>
       </div>
     </div>
   );
